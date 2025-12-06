@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     {
         // Score update
         _elapsedTime += Time.deltaTime;
-        _scoreText.text = "Score: " + (int)((_elapsedTime + Time.deltaTime) * 10);
+        _scoreText.text = ((int)((_elapsedTime + Time.deltaTime) * 10)).ToString();
         
         if (_restartButton.style.display == DisplayStyle.Flex &&
             Keyboard.current.spaceKey.wasPressedThisFrame)
@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
         
         _restartButton.style.display = DisplayStyle.Flex;
         
-        _scoreText.text = "smashed";
+        _scoreText.text = $"smashed: {_scoreText.text}";
     }
 
     private static void ReloadScene()

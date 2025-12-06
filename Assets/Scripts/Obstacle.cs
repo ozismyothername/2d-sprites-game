@@ -5,13 +5,13 @@ public class Obstacle : MonoBehaviour
 {
     private Rigidbody2D _rb;
     
-    public float minSize = 1;
+    public float minSize = 1f;
     public float maxSize = 2f;
 
-    public float minSpeed = 1f;
-    public float maxSpeed = 2f;
+    public float minSpeed = 0.5f;
+    public float maxSpeed = 1f;
 
-    public float maxSpinSpeed = 2f;
+    public float maxSpinSpeed = 0.7f;
 
     private void Start()
     {
