@@ -11,7 +11,7 @@ public class Obstacle : MonoBehaviour
     public float minSpeed = 1f;
     public float maxSpeed = 2f;
 
-    public float maxSpinSpeed = 5f;
+    public float maxSpinSpeed = 2f;
 
     private void Start()
     {

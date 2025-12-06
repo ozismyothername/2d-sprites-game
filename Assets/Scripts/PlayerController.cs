@@ -87,6 +87,8 @@ public class PlayerController : MonoBehaviour
         Destroy(gameObject);
         
         _restartButton.style.display = DisplayStyle.Flex;
+        
+        _scoreText.text = "smashed";
     }
 
     private static void ReloadScene()

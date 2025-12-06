@@ -189,4 +189,4 @@ MonoBehaviour:
   maxSize: 2
   minSpeed: 1
   maxSpeed: 2
-  maxSpinSpeed: 5
+  maxSpinSpeed: 2
