@@ -1,0 +1,75 @@
+name: Build & Deploy Unity WebGL to GitHub Pages
+
+# ------------------------------------------------
+# When does CI run?
+# Here: on every push or merge to the main branch.
+# ------------------------------------------------
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  # ------------------------------------------------
+  # Job 1: Build the Unity project in WebGL mode
+  # ------------------------------------------------
+  build:
+    runs-on: ubuntu-latest
+    name: Build WebGL
+
+    steps:
+      # Step 1: Checkout the repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true   # Unity projects often use Large File Storage
+
+      # Step 2: Cache the Library folder to speed up builds
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ hashFiles('**/Packages/packages-lock.json') }}
+          restore-keys: |
+            Library-
+
+      # Step 3: Build using game-ci Unity Builder
+      - name: Build WebGL
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}   # Your Unity license secret
+        with:
+          unityVersion: 6000.2.14f1     # <<< CHANGE THIS to your exact Unity version
+          targetPlatform: WebGL         # Build WebGL only
+
+      # Step 4: Upload the built WebGL folder as an artifact (temporary storage)
+      - name: Upload WebGL Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WebGLBuild
+          path: build/WebGL
+
+
+  # ------------------------------------------------
+  # Job 2: Deploy WebGL build to GitHub Pages
+  # ------------------------------------------------
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to GitHub Pages
+    needs: build   # This job waits for the build job to finish
+
+    steps:
+      # Step 1: Download the build artifact created in the previous job
+      - name: Download WebGL Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: WebGLBuild
+          path: build/WebGL
+
+      # Step 2: Deploy contents of build/WebGL to the gh-pages branch
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/WebGL
+          publish_branch: gh-pages
